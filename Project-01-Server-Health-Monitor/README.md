@@ -57,6 +57,7 @@ Memory Usage  : 5%    [OK]
 Disk Usage    : 4%    [OK]
 ========================================
 
+```
 ## Screenshots
 
 ### Project Structure
