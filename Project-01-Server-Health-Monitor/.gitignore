@@ -1,0 +1,11 @@
+# Ignore generated log files
+logs/*.log
+
+# Keep the directory in Git
+!logs/.gitkeep
+
+# Vim swap files
+*.swp
+
+# Temporary files
+*.tmp
