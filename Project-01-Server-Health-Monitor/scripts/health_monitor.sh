@@ -15,7 +15,10 @@ MEMORY_THRESHOLD=80
 DISK_THRESHOLD=80
 
 # Replace with your email address
-EMAIL="vishnu@unicloud.co"
+EMAILS=(
+	"vishnu@unicloud.co"
+	"akhil@unicloud.co"
+)
 
 # ==========================
 # Server Information
@@ -57,33 +60,33 @@ write_log() {
 
 }
 
-# Display server health
-#
-#
-#
+send_email_alert() {
 
-# Send Email Alert
-send_alert() {
+    SUBJECT="[ALERT]🚨 Server Health Warning - $HOSTNAME"
 
-SUBJECT="🚨 SERVER HEALTH ALERT"
-
-BODY="
+    BODY="
 Server Health Alert
 
 Hostname : $HOSTNAME
 Time     : $CURRENT_TIME
 
-CPU Usage     : ${CPU_USAGE}% [$CPU_STATUS]
-Memory Usage  : ${MEMORY_USAGE}% [$MEMORY_STATUS]
-Disk Usage    : ${DISK_USAGE}% [$DISK_STATUS]
+CPU Usage    : ${CPU_USAGE}% [$CPU_STATUS]
+Memory Usage : ${MEMORY_USAGE}% [$MEMORY_STATUS]
+Disk Usage   : ${DISK_USAGE}% [$DISK_STATUS]
 
-Please investigate immediately.
+Please check the server immediately.
 "
 
-echo "$BODY" | mail -s "$SUBJECT" "$EMAIL"
-
+    for EMAIL in "${EMAILS[@]}"
+    do
+        echo "$BODY" | mail -s "$SUBJECT" "$EMAIL"
+    done
 }
 
+# Display server health
+#
+#
+#
 
 display_status() {
 
@@ -119,21 +122,17 @@ DISK_USAGE=$(get_disk_usage)
 CPU_STATUS="OK"
 MEMORY_STATUS="OK"
 DISK_STATUS="OK"
-ALERT=false
 
 if [ "$CPU_USAGE" -ge "$CPU_THRESHOLD" ]; then
     CPU_STATUS="WARNING"
-    ALERT=true
 fi
 
 if [ "$MEMORY_USAGE" -ge "$MEMORY_THRESHOLD" ]; then
     MEMORY_STATUS="WARNING"
-    ALERT=true
 fi
 
 if [ "$DISK_USAGE" -ge "$DISK_THRESHOLD" ]; then
     DISK_STATUS="WARNING"
-    ALERT=true
 fi
 
 # ==========================
@@ -184,6 +183,12 @@ write_log
 
 
 
-if [ "$ALERT" = true ]; then
-    send_alert
+
+if [[ "$CPU_STATUS" == "WARNING" || \
+      "$MEMORY_STATUS" == "WARNING" || \
+      "$DISK_STATUS" == "WARNING" ]]
+then
+    send_email_alert
 fi
+
+echo "========================================"
