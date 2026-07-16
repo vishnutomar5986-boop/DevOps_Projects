@@ -45,8 +45,17 @@ chmod +x scripts/health_monitor.sh
 ```
 
 ## Sample Output
-
-(Add screenshot)
+```text
+========================================
+      SERVER HEALTH MONITOR
+========================================
+Hostname      : aio-pr
+Time          : 2026-07-14 12:11:16
+----------------------------------------
+CPU Usage     : 0%    [OK]
+Memory Usage  : 5%    [OK]
+Disk Usage    : 4%    [OK]
+========================================
 
 ## Screenshots
 
