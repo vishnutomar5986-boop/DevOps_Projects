@@ -65,3 +65,11 @@ chmod +x scripts/health_monitor.sh
 ### Cron Job
 
 ![Cron Job](screenshots/04-cron-job.png)
+
+---
+
+## Git Commit History
+
+This project follows a proper Git workflow with multiple commits during development.
+
+![Git Commit History](screenshots/05-git-commit-history.png)
