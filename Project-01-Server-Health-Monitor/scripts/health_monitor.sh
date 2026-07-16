@@ -1,0 +1,189 @@
+#!/bin/bash
+
+##################################################
+# Project : Server Health Monitor
+# Author  : Vishnu Tomar
+# Purpose : Monitor CPU, Memory and Disk usage
+##################################################
+
+# ==========================
+# Configuration
+# ==========================
+
+CPU_THRESHOLD=90
+MEMORY_THRESHOLD=80
+DISK_THRESHOLD=80
+
+# Replace with your email address
+EMAIL="vishnu@unicloud.co"
+
+# ==========================
+# Server Information
+# ==========================
+
+HOSTNAME=$(hostname)
+CURRENT_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+
+# ==========================
+# Functions
+# ==========================
+
+# Get CPU usage percentage
+get_cpu_usage() {
+    top -bn1 | awk -F',' '/Cpu/ {
+        gsub(" id", "", $4)
+        print int(100 - $4)
+    }'
+}
+
+# Get Memory usage percentage
+get_memory_usage() {
+    free | awk '/Mem:/ {
+        printf("%.0f", $3/$2 * 100)
+    }'
+}
+
+# Get Disk usage percentage of the root filesystem
+get_disk_usage() {
+    df / | tail -1 | awk '{print $5}' | tr -d '%'
+}
+
+# Write server health to log file
+write_log() {
+
+    LOG_FILE="logs/health-$(date +%F).log"
+
+    echo "$CURRENT_TIME | HOST:$HOSTNAME | CPU:${CPU_USAGE}%($CPU_STATUS) | MEM:${MEMORY_USAGE}%($MEMORY_STATUS) | DISK:${DISK_USAGE}%($DISK_STATUS)" >> "$LOG_FILE"
+
+}
+
+# Display server health
+#
+#
+#
+
+# Send Email Alert
+send_alert() {
+
+SUBJECT="🚨 SERVER HEALTH ALERT"
+
+BODY="
+Server Health Alert
+
+Hostname : $HOSTNAME
+Time     : $CURRENT_TIME
+
+CPU Usage     : ${CPU_USAGE}% [$CPU_STATUS]
+Memory Usage  : ${MEMORY_USAGE}% [$MEMORY_STATUS]
+Disk Usage    : ${DISK_USAGE}% [$DISK_STATUS]
+
+Please investigate immediately.
+"
+
+echo "$BODY" | mail -s "$SUBJECT" "$EMAIL"
+
+}
+
+
+display_status() {
+
+    echo
+    echo "========================================"
+    echo "      SERVER HEALTH MONITOR"
+    echo "========================================"
+
+    echo "Hostname      : $HOSTNAME"
+    echo "Time          : $CURRENT_TIME"
+
+    echo "----------------------------------------"
+
+    echo "CPU Usage     : ${CPU_USAGE}%    [$CPU_STATUS]"
+    echo "Memory Usage  : ${MEMORY_USAGE}%    [$MEMORY_STATUS]"
+    echo "Disk Usage    : ${DISK_USAGE}%    [$DISK_STATUS]"
+
+    echo "========================================"
+}
+
+# ==========================
+# Collect Metrics
+# ==========================
+
+CPU_USAGE=$(get_cpu_usage)
+MEMORY_USAGE=$(get_memory_usage)
+DISK_USAGE=$(get_disk_usage)
+
+# ==========================
+# Check Thresholds
+# ==========================
+
+CPU_STATUS="OK"
+MEMORY_STATUS="OK"
+DISK_STATUS="OK"
+ALERT=false
+
+if [ "$CPU_USAGE" -ge "$CPU_THRESHOLD" ]; then
+    CPU_STATUS="WARNING"
+    ALERT=true
+fi
+
+if [ "$MEMORY_USAGE" -ge "$MEMORY_THRESHOLD" ]; then
+    MEMORY_STATUS="WARNING"
+    ALERT=true
+fi
+
+if [ "$DISK_USAGE" -ge "$DISK_THRESHOLD" ]; then
+    DISK_STATUS="WARNING"
+    ALERT=true
+fi
+
+# ==========================
+# Display Server Health
+# ==========================
+
+#echo
+#echo "========================================"
+#echo "      SERVER HEALTH MONITOR"
+#echo "========================================"
+
+#echo "Hostname      : $HOSTNAME"
+#echo "Time          : $CURRENT_TIME"
+
+#echo "----------------------------------------"
+
+#echo "CPU Usage     : ${CPU_USAGE}%    [$CPU_STATUS]"
+#echo "Memory Usage  : ${MEMORY_USAGE}%    [$MEMORY_STATUS]"
+#echo "Disk Usage    : ${DISK_USAGE}%    [$DISK_STATUS]"
+
+# ==========================
+# Logging
+# ==========================
+
+#LOG_FILE="logs/health.log"
+
+#echo "$CURRENT_TIME | HOST:$HOSTNAME | CPU:${CPU_USAGE}%($CPU_STATUS) | MEM:${MEMORY_USAGE}%($MEMORY_STATUS) | DISK:${DISK_USAGE}%($DISK_STATUS)" >> "$LOG_FILE"
+
+# Write log entry
+
+#write_log
+
+#echo "========================================"
+#
+#
+#
+# ==========================
+# Display Server Health
+# ==========================
+
+display_status
+
+# ==========================
+# Logging
+# ==========================
+
+write_log
+
+
+
+if [ "$ALERT" = true ]; then
+    send_alert
+fi
