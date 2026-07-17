@@ -11,7 +11,7 @@ This repository contains hands-on DevOps projects that I build while learning an
 | No. | Project | Status |
 |-----|---------|--------|
 | 01 | Server Health Monitor using Bash | ✅ Completed |
-| 02 | Something Diffrent... | 🚧 Coming Soon |
+| 02 | Project-02-Docker-Nginx-GitHub-Actions | 🚧 In Progress |
 | 03 | Something Diffrent... | 🚧 Coming Soon |
 | 04 | Nginx Reverse Proxy | 🚧 Coming Soon |
 | 05 | Dockerize a Flask Application | 🚧 Coming Soon |
