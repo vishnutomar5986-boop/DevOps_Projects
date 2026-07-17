@@ -11,7 +11,8 @@ A Bash scripting project that monitors server health on a Linux machine.
 - Timestamped Logs
 - Daily Log Files
 - Cron Automation
-- Email Alert Support (Postfix)
+- Email Alert using Gmail SMTP (Postfix)
+- Support for Multiple Email Recipients
 
 ## Technologies
 
@@ -19,6 +20,7 @@ A Bash scripting project that monitors server health on a Linux machine.
 - Linux
 - Cron
 - Postfix
+- Gmail SMTP
 - Mailutils
 
 ## Project Structure
@@ -43,6 +45,21 @@ Project-01-Server-Health-Monitor/
 chmod +x scripts/health_monitor.sh
 ./scripts/health_monitor.sh
 ```
+
+## Email Alerts
+
+The project supports automatic email notifications whenever CPU, Memory, or Disk usage exceeds the configured threshold.
+
+The alert system uses:
+
+- Gmail SMTP
+- Postfix
+- Mailutils
+
+Configuration instructions are available in:
+
+- `docs/Gmail-SMTP-Setup.md`
+
 
 ## Sample Output
 ```text
@@ -83,3 +100,17 @@ Disk Usage    : 4%    [OK]
 This project follows a proper Git workflow with multiple commits during development.
 
 ![Git Commit History](screenshots/05-git-commit-history.png)
+
+---
+
+# Documentation
+
+Detailed setup and configuration guides are available in the `docs/` directory.
+
+| Document | Description |
+|----------|-------------|
+| [Installation.md](docs/Installation.md) | Installation and initial project setup on Ubuntu |
+| [Gmail-SMTP-Setup.md](docs/Gmail-SMTP-Setup.md) | Configure Gmail SMTP with Postfix for email alerts |
+| [Troubleshooting.md](docs/Troubleshooting.md) | Common issues, fixes, and debugging steps |
+
+---
