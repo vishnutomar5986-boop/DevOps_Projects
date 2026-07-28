@@ -1,0 +1,23 @@
+{
+  "name": "project-02-docker-nginx-github-actions",
+  "version": "1.0.0",
+  "description": "CI/CD pipeline using Docker, Nginx, GitHub Actions, and Node.js",
+  "main": "app/app.js",
+  "scripts": {
+    "start": "node app/app.js",
+    "test": "echo \"No tests specified\""
+  },
+  "keywords": [
+    "docker",
+    "nginx",
+    "github-actions",
+    "cicd",
+    "nodejs"
+  ],
+  "author": "Vishnu",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
