@@ -1,0 +1,21 @@
+# Node dependencies
+node_modules
+
+# Git
+.git
+
+# Environment
+.env
+
+# Logs
+npm-debug.log*
+
+# Documentation
+docs/
+screenshots/
+
+# IDE
+.vscode
+
+# OS files
+.DS_Store
