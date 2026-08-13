@@ -33,7 +33,7 @@ echo "[4/5] Starting new container..."
 docker run -d \
     --name "$CONTAINER" \
     --restart unless-stopped \
-    -p 3000:3000 \
+    -p 127.0.0.1:3000:3000 \
     "$IMAGE"
 
 echo "[5/5] Verifying deployment..."
