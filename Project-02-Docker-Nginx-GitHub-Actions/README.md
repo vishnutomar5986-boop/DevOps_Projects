@@ -2,77 +2,48 @@
 
 ## Overview
 
-This project demonstrates how to automate the deployment of a Dockerized Node.js application to a Linux cloud server using GitHub Actions.
+This project demonstrates an automated CI/CD pipeline for deploying a containerized Node.js application to an Ubuntu Virtual Machine hosted on Oracle Cloud Infrastructure (OCI).
 
-The objective is to build a simple Continuous Integration and Continuous Deployment (CI/CD) pipeline where every push to the `main` branch automatically deploys the latest version of the application to an Oracle Cloud Infrastructure (OCI) Virtual Machine.
+The pipeline automatically builds the Docker image, pushes it to Docker Hub, connects securely to the OCI VM using SSH, pulls the latest image, replaces the running container, and verifies the deployment through a health-check endpoint.
 
-The deployment uses Docker for containerization, Nginx as a reverse proxy, GitHub Actions for automation, and SSH for secure remote deployment.
-
----
-
-## Project Goals
-
-- Deploy a Node.js application using Docker
-- Configure Nginx as a reverse proxy
-- Automate deployments with GitHub Actions
-- Secure deployment using SSH keys and GitHub Secrets
-- Document every step of the implementation
+Nginx is used as a reverse proxy so that external HTTP traffic reaches the Node.js application running inside the Docker container.
 
 ---
 
-## Technology Stack
+## Architecture
 
-- Node.js
-- Docker
-- Nginx
-- GitHub Actions
-- Git
-- Linux (Ubuntu)
-- Oracle Cloud Infrastructure (OCI)
-
----
-
-## Project Status
-
-🚧 In Progress
-
-This project is being developed incrementally. Each phase is documented and committed separately to demonstrate the complete development process.
-
----
-
-## Planned Directory Structure
-
-```
-Project-02-Docker-Nginx-GitHub-Actions/
-│
-├── app/
-├── docs/
-├── nginx/
-├── scripts/
-├── screenshots/
-├── .github/
-│   └── workflows/
-├── Dockerfile
-├── .dockerignore
-├── package.json
-└── README.md
-```
-
----
-
-## Documentation
-
-Detailed implementation guides will be added to the `docs/` directory as the project progresses.
-
----
-
-## Learning Objectives
-
-By completing this project, I aim to gain practical experience with:
-
-- Docker containerization
-- Reverse proxy configuration
-- CI/CD pipelines
-- GitHub Actions workflows
-- Linux server administration
-- Production deployment practices
+```text
+Developer
+    |
+    | git push
+    v
+GitHub Repository
+    |
+    | GitHub Actions
+    v
++-----------------------------+
+| CI/CD Pipeline              |
+|                             |
+| 1. Checkout repository      |
+| 2. Login to Docker Hub      |
+| 3. Build Docker image       |
+| 4. Push image               |
+| 5. Configure SSH            |
+| 6. Deploy to OCI VM         |
+| 7. Verify deployment        |
++-------------+---------------+
+              |
+              | SSH
+              v
+       OCI Ubuntu VM
+              |
+              v
+       Docker Container
+        Node.js App
+        127.0.0.1:3000
+              ^
+              |
+         Nginx :80
+              |
+              v
+          HTTP Client
